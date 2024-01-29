@@ -9,7 +9,7 @@ import patientRoutes from "./routes/patient.js"
 import cors from "cors"
 import bodyParser from "body-parser";
 
-const PORT = process.env.PORT || 8800 ;
+const PORT = process.env.PORT || 3306 ;
 
 const DATA_FILE = 'appointments.json';
 const app = express()
