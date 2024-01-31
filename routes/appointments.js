@@ -2,20 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors"
 
-import { BookAppointment,getAppointment,countAppointment } from "../controllers/appoinmentcon.js";
+import {getAppointment,addAppointment,getdAppointment,countAppointment } from "../controllers/appoinmentcon.js";
 
 const router = express.Router()
 
+router.post("/data", addAppointment)
 
+router.get("/data", getAppointment)
 
-router.post("/appointments", BookAppointment)
+router.get("/today-data", getdAppointment)
 
-router.get("/appointments", getAppointment)
-
-router.get("/appointments/count", countAppointment)
-
-
-
-
+router.get("/data/count", countAppointment)
 
 export default router
