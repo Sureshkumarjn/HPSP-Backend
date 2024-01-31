@@ -4,9 +4,78 @@ import cors from "cors"
 import fs from "fs"
 
 
-const DATA_FILE = 'appointments.json';
+const dataFilePath = 'appointments.json';
 
-let appointments = [];
+export const getAppointment = (req, res) => {
+
+  try {
+    const rawData = fs.readFileSync(dataFilePath);
+    const data = JSON.parse(rawData);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+  
+};
+
+export const addAppointment = (req, res) => {
+  try {
+    const rawData = fs.readFileSync(dataFilePath);
+    let data = JSON.parse(rawData);
+
+    const today = new Date().toLocaleDateString();
+    const { id, name, age } = req.body;
+
+    const newData = { id, name, age, date: today };
+    data.push(newData);
+
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+
+    res.json(newData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+  
+};
+export const getdAppointment = (req, res) => {
+  try {
+    const rawData = fs.readFileSync(dataFilePath);
+    const data = JSON.parse(rawData);
+    
+    const todayData = data.filter(item => item.date === new Date().toLocaleDateString());
+    
+    res.json(todayData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+ 
+  
+};
+export const countAppointment = (req, res) => {
+   
+  try {
+    const rawData = fs.readFileSync(dataFilePath);
+    const appointments = JSON.parse(rawData);
+
+    const today = new Date().toLocaleDateString();
+
+    // Filter appointments for today
+    const todayAppointments = appointments.filter(appointment => appointment.date === today);
+
+    // Get the count of appointments for today
+    const count = todayAppointments.length;
+
+    res.json({ count });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+/*let appointments = [];
 
 // Load existing data from the JSON file on server start
 fs.readFile(DATA_FILE, 'utf8', (err, data) => {
@@ -23,7 +92,7 @@ fs.readFile(DATA_FILE, 'utf8', (err, data) => {
   }
 });
 
-export const getAppointment = (req, res) => {
+/*export const getAppointment = (req, res) => {
    
     res.json(appointments);
 };
@@ -47,4 +116,4 @@ export const BookAppointment = (req, res) => {
   });
 
   res.json(newAppointment);
-};
+};*/
